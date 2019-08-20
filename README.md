@@ -28,7 +28,7 @@ Example Playbook
 
     - hosts: server
       roles:
-        - role: 13rentgen.grafana-annotations-bot
+        - role: 13rentgen.grafana_annotations_bot
           telegram_bot_token: 'TOKEN'
           telegram_bot_admins: 
             - '123'
