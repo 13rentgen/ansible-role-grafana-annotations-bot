@@ -1,4 +1,4 @@
-Role Name [![Build Status](https://travis-ci.org/13rentgen/ansible-role-grafana-annotations-bot.svg?branch=master)](https://travis-ci.org/13rentgen/ansible-role-grafana-annotations-bot)
+Ansible role: Grafana Annotations Bot [![Build Status](https://travis-ci.org/13rentgen/ansible-role-grafana-annotations-bot.svg?branch=master)](https://travis-ci.org/13rentgen/ansible-role-grafana-annotations-bot)
 =========
 
 Ansible role for [Grafana Annotation Bot](https://github.com/13rentgen/grafana-annotations-bot). Currently this works on Debian and RedHat based linux systems (only systemd support). Tested platforms are:
