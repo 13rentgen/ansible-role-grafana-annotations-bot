@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  connection: local
+  roles:
+    - role: grafana-annotations-bot
+      telegram_bot_token: 'TOKEN'
+      telegram_bot_admins:
+        - '123'
+        - '456'
+      grafana_url: 'http://127.0.0.1:3000'
+      grafana_api_token: 'BEARER-TOKEN'
