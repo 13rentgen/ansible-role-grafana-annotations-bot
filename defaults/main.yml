@@ -1,0 +1,20 @@
+---
+telegram_bot_version: "v0.2.0"
+
+telegram_bot_system_user: "grafana_annotations_bot"
+telegram_bot_system_group: "{{ telegram_bot_system_user }}"
+telegram_bot_system_service: "{{ telegram_bot_system_user }}"
+
+telegram_bot_dir: "/opt/{{ telegram_bot_system_user }}"
+
+telegarm_bot_env:
+  LOG_JSON: "True"
+
+telegram_bot_flags:
+  'grafana.url': "{{ grafana_url }}"
+  'grafana.token': "{{ grafana_api_token }}"
+  'grafana.scrape_interval': "{{ grafana_scrape_interval | default('5s') }}"
+  'bolt.path': "{{ telegram_bot_dir }}/bot.db"
+  'log.level': "{{ telegram_bot_log_level | default('warn') }}"
+  'telegram.token': "{{ telegram_bot_token }}"
+  'template.path': "{{ telegram_bot_dir }}/default.tmpl"

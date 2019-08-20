@@ -1,0 +1,11 @@
+---
+- include: preflight.yml
+- include: install.yml
+
+- name: Ensure Telegram bot is enabled on boot
+  become: true
+  systemd:
+    daemon_reload: true
+    state: started
+    name: "{{ telegram_bot_system_service }}"
+    enabled: true

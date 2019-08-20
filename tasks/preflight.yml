@@ -1,0 +1,36 @@
+---
+- name: Fail when service manager isn't systemd
+  fail:
+    msg: "Only systemd distributions supported"
+  when:
+    - ansible_service_mgr != "systemd"
+
+- name: Fail when telegram_bot_token isn't set
+  fail:
+    msg: "Please provide telegram token (telegram_bot_token)"
+  when:
+    - telegram_bot_token is not defined
+
+- name: Fail when telegram admins isn't set
+  fail:
+    msg: "Please provide telegram admins for the bot (telegram_bot_admins)"
+  when:
+    - telegram_bot_admins|length == 0
+
+- name: Fail when grafana_url isn't set
+  fail:
+    msg: "Please provide Grafana url (grafana_url)"
+  when:
+    - grafana_url is not defined
+
+- name: Fail when grafana_api_token isn't set
+  fail:
+    msg: "Please provide Grafana API token (grafana_api_token)"
+  when:
+    - grafana_api_token is not defined
+
+- name: Fail when telegram_bot_log_level isn't correct
+  fail:
+    msg: "The log level can only be one of the following values: debug, info, warn or error"
+  when:
+    - telegram_bot_log_level is defined and telegram_bot_log_level not in ['debug', 'info', 'warn', 'error']

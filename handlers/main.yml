@@ -1,0 +1,5 @@
+---
+- name: restart telegram bot
+  service:
+    name: "{{ telegram_bot_system_service }}"
+    state: restarted

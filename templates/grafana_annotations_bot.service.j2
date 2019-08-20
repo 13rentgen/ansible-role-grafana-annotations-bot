@@ -1,0 +1,21 @@
+[Unit]
+Description=Grafana Annotations Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User={{ telegram_bot_system_user }}
+Group={{ telegram_bot_system_group }}
+
+{% for flag, value in telegarm_bot_env.items() %}
+Environment={%filter upper %}{{flag}}{% endfilter %}={{value}}
+{% endfor %}
+
+ExecStart=/usr/local/bin/{{ telegram_bot_system_service }}{% for f, v in telegram_bot_flags.items() %} --{{f}}={{v}}{% endfor %} {% for v in telegram_bot_admins %} --telegram.admin={{v}}{% endfor %}
+
+SyslogIdentifier={{ telegram_bot_system_service }}
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

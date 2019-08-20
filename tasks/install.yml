@@ -1,0 +1,72 @@
+---
+- name: Create the telegram bot group
+  group:
+    name: "{{ telegram_bot_system_group }}"
+    state: present
+    system: true
+
+- name: Create the telegram bot user
+  user:
+    name: "{{ telegram_bot_system_user }}"
+    groups: "{{ telegram_bot_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+    home: /
+
+- name: Download telegaram bot binary
+  become: false
+  get_url:
+    url: "{{ telegram_bot_url }}"
+    dest: "/tmp/{{ telegram_bot_release_name }}"
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+  delegate_to: localhost
+  check_mode: false
+
+- name: Create /usr/local/bin
+  file:
+    path: /usr/local/bin
+    state: directory
+    mode: 0755
+
+- name: Propagate telegaram bot binaries
+  copy:
+    src: "/tmp/{{ telegram_bot_release_name }}"
+    dest: "/usr/local/bin/{{ telegram_bot_system_service }}"
+    mode: 0750
+    owner: "{{ telegram_bot_system_user }}"
+    group: "{{ telegram_bot_system_group }}"
+  notify: restart telegram bot
+  when: not ansible_check_mode
+
+- name: Create Telegram bot directory
+  file:
+    path: "{{ telegram_bot_dir }}"
+    state: directory
+    owner: root
+    group: "{{ telegram_bot_system_group }}"
+    mode: 0750
+
+- name: Copy template file
+  copy:
+    src: "default.tmpl"
+    dest: "{{ telegram_bot_dir }}"
+    owner: root
+    group: "{{ telegram_bot_system_group }}"
+    mode: 0640
+  notify:
+    - restart telegram bot
+
+- name: Create systemd service unit
+  template:
+    src: grafana_annotations_bot.service.j2
+    dest: "/etc/systemd/system/{{ telegram_bot_system_service }}.service"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_service_mgr == 'systemd'
+  notify: restart telegram bot
